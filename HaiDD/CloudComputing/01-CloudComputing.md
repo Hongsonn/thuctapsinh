@@ -28,9 +28,13 @@ Dù là public hay private, mục tiêu của cloud computing là cung cấp quy
 
 2. **Broad network access** (Truy cập mạng rộng) : Khả năng có sẵn trên mạng và được truy cập thông qua các cơ chế tiêu chuẩn thúc đẩy sử dụng bởi các nền tảng máy khách (client platform) thin hoặc thick phức tạp. (ví dụ: điện thoại di động, máy tính bảng, laptop hay  máy trạm)
 
-3. **Resource pooling** (Nguồn tổng hợp) : Các tài nguyên điện toán của nhà cung cấp được tổng hợp lại để phục vụ nhiều người dùng sử dụng với mô hình multi-tenant (nhiều người thuê), với các tài nguyên vật lý và ảo khác nhau được gán động và phân bổ lại theo nhu cầu của người dùng. 
+    Người dùng có thể truy cập dữ liệu trên Cloud hoặc tải dữ liệu lên cloud từ bất kỳ đâu có internet.
+
+3. **Resource pooling** (Nguồn tổng hợp) : Các tài nguyên điện toán của nhà cung cấp được tổng hợp lại để phục vụ nhiều người dùng sử dụng với mô hình multi-tenant (nhiều người thuê), với các tài nguyên vật lý và ảo khác nhau được gán động và phân bổ lại theo nhu cầu của người dùng.
     
     Ý nghĩa của sự độc lập về vị trí là khách hàng thường không có quyền kiểm soát hoặc kiến thức về vị trí chính xác của các tài nguyên được cung cấp nhưng có thể chỉ định vị trí ở mức độ trừu tượng cao hơn (ví dụ: quốc gia, tiểu bang hoặc datacenter). Ví dụ về tài nguyên bao gồm storage, processing, memory và network bandwidth.
+
+    Multi-tenancy cho phép nhiều khách hàng chia sẻ cùng một cơ sở hạ tầng vật lý hoặc cùng các ứng dụng, nhưng vẫn giữ được quyền riêng tư và bảo mật đối với dữ liệu của chính họ. Với việc tổng hợp tài nguyên, các nhà cung cấp đám mây phục vụ nhiều khách hàng từ các tài nguyên vật lý tương tự nhau. Nhóm tài nguyên của các nhà cung cấp đám mây phải rất lớn và đủ linh hoạt để họ có thể phục vụ các yêu cầu của nhiều khách hàng
 
 4. **Rapid elasticity** (Tính đàn hồi nhanh) : Khả năng có thể được cung cấp và giải phóng một cách linh hoạt, trong một số trường hợp tự động, nhanh chóng mở rộng ra ngoài và thu vào tương ứng với yêu cầu.
 
@@ -45,7 +49,11 @@ Dù là public hay private, mục tiêu của cloud computing là cung cấp quy
 
     Các ứng dụng có thể truy cập từ nhiều thiết bị khách khác nhau thông qua giao diện máy khách tối thiểu, chẳng hạn như trình duyệt web (email trên web) hoặc giao diện chương trình.
 
-    Người dùng không quản lý hay kiểm soát cơ sở hạ tầng Cloud cơ bản bao gồm mạng, máy chủ, hệ điều hành, storage hoặc thậm chí các khả năng ứng dụng riêng lẻ, ngoại trừ các cài đặt cấu hình ứng dụng cụ thể của người dùng
+    Người dùng không quản lý hay kiểm soát cơ sở hạ tầng Cloud cơ bản bao gồm mạng, máy chủ, hệ điều hành, storage hoặc thậm chí các khả năng ứng dụng riêng lẻ, ngoại trừ các cài đặt cấu hình ứng dụng cụ thể của người dùng.
+
+    Người dùng có thể truy cập các ứng dụng và dịch vụ SaaS từ bất kỳ vị trí nào bằng máy tính hoặc thiết bị di động có kết nối internet. Người dùng có quyền truy cập vào phần mềm ứng dụng và cơ sở dữ liệu.
+
+    **Ví dụ:** Microsoft Office 365 và các dịch vụ mail
 
     **Cơ sở hạ tầng Cloud:** là tập hợp phần cứng và phần mềm cho phép 5 đặc điểm thiết yếu của Cloud computing. Cơ sở hạ tầng Cloud có thể được xem là chứa cả lớp vật lý và trừu tượng. Về mặt khái niệm, lớp trừu tượng nằm trên lớp vật lý.
     - Lớp vật lý bao gồm các tài nguyên phần cứng cần thiết để hỗ trợ các dịch vụ Cloud được cung cấp, thường bao gồm các thành phần: máy chủ, storage, mạng.
@@ -55,9 +63,11 @@ Dù là public hay private, mục tiêu của cloud computing là cung cấp quy
 
     Người tiêu dùng không quản lý hoặc kiểm soát hạ tầng Cloud cơ bản bao gồm mạng, máy chủ, hệ điểu hành hay storage nhưng có quyền kiểm soát các ứng dụng đã triển khai và có thể cài đặt cấu hình cho môi trường lưu trữ ứng dụng.
 
+    Người dùng truy cập các công cụ này qua internet bằng API, web port hoặc gateway software. PaaS được sử dụng để phát triển phần mềm nói chung. Các nhà cung cấp PaaS phổ biến bao gồm Nền tảng sét của Salesforce, BeanSalk AWS và Google App Engine.
+
 3. **Infrastructure as a Service (IaaS)** : Khả năng cung cấp cho người dùng là cung cấp xử lý, lưu trữ, mạng và các tài nguyên điện toán cơ bản khác nơi người dùng có thể triển khai và chạy phần mềm tùy ý, có thể bao gồm các hệ điều hành và ứng dụng.
 
-    Người dùng không quản lý hoặc kiểm soát cơ sở hạ tầng Cloud mà có quyền kiểm soát các hệ điều hành, lưu trữ và các ứng dụng được triển khai và có thể kiểm soát hạn chế các thành phần mạng được chọn (ví dụ: tường lửa máy chủ)
+    Người dùng không quản lý hoặc kiểm soát cơ sở hạ tầng Cloud mà có quyền kiểm soát các hệ điều hành, lưu trữ và các ứng dụng được triển khai và có thể kiểm soát hạn chế các thành phần mạng được chọn (ví dụ: tường lửa máy chủ).
 
 ### 3. Mô hình triển khai (4 mô hình triển khai)
 1. **Private cloud** : Hạ tầng cloud được cung cấp để sử dụng độc quyền bởi một tổ chức nhiều người dùng (ví dụ: các đơn vị kinh doanh). Nó có thể được sở hữu, quản lý và vận hành bởi tổ chức, bên thứ 3 hoặc một số tổ hợp của họ và nó có thể tồn tại trong hoặc ngoài cơ sở.
