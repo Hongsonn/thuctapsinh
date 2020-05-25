@@ -1,5 +1,5 @@
 #!/bin/bash
-DATE=$(date)
+DATE=$(date "+%d %b %Y %H:%M")
 TOKEN="bot_TOKEN"
 ID="ID-Telegram"
 URL="https://api.telegram.org/bot$TOKEN/sendMessage"
