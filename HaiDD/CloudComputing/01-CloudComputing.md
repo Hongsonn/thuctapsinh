@@ -24,7 +24,7 @@ Dù là public hay private, mục tiêu của cloud computing là cung cấp quy
 ## II. Mô hình Cloud 5-3-4
 
 ### 1. Đặc điểm thiết yếu (5 đặc điểm)
-1. **On-demand self-service** (Dịch vụ tự phục vụ theo yêu cầu) : Một khách hàng có thể đơn phương cung cấp các khả năng tính toán. Chẳng hạn như thời gian máy chủ và lưu trữ mạng, khi cần tự động mà không yêu cầu tương tác của con người với mỗi nhà cung cấp dịch vụ.
+1. **On-demand self-service** (Dịch vụ tự phục vụ theo yêu cầu) : Một khách hàng có thể đơn phương cung cấp các khả năng tính toán. Chẳng hạn như thời gian máy chủ và lưu trữ mạng, khi cần có thể tự yêu cầu theo nhu cầu mà không cần phải qua nhà cung cấp
 
 2. **Broad network access** (Truy cập mạng rộng) : Khả năng có sẵn trên mạng và được truy cập thông qua các cơ chế tiêu chuẩn thúc đẩy sử dụng bởi các nền tảng máy khách (client platform) thin hoặc thick phức tạp. (ví dụ: điện thoại di động, máy tính bảng, laptop hay  máy trạm)
 
@@ -65,21 +65,32 @@ Dù là public hay private, mục tiêu của cloud computing là cung cấp quy
 
     Người dùng truy cập các công cụ này qua internet bằng API, web port hoặc gateway software. PaaS được sử dụng để phát triển phần mềm nói chung. Các nhà cung cấp PaaS phổ biến bao gồm Nền tảng sét của Salesforce, BeanSalk AWS và Google App Engine.
 
+    Ví dụ: Tiki, Lazada, ... là những PaaS cung cấp nền tảng bán hàng, nơi mà người dùng truy cập sử dụng tạo các gian hàng tùy ý để trao đổi, buôn bán
+
 3. **Infrastructure as a Service (IaaS)** : Khả năng cung cấp cho người dùng là cung cấp xử lý, lưu trữ, mạng và các tài nguyên điện toán cơ bản khác nơi người dùng có thể triển khai và chạy phần mềm tùy ý, có thể bao gồm các hệ điều hành và ứng dụng.
 
     Người dùng không quản lý hoặc kiểm soát cơ sở hạ tầng Cloud mà có quyền kiểm soát các hệ điều hành, lưu trữ và các ứng dụng được triển khai và có thể kiểm soát hạn chế các thành phần mạng được chọn (ví dụ: tường lửa máy chủ).
 
 ### 3. Mô hình triển khai (4 mô hình triển khai)
-1. **Private cloud** : Hạ tầng cloud được cung cấp để sử dụng độc quyền bởi một tổ chức nhiều người dùng (ví dụ: các đơn vị kinh doanh). Nó có thể được sở hữu, quản lý và vận hành bởi tổ chức, bên thứ 3 hoặc một số tổ hợp của họ và nó có thể tồn tại trong hoặc ngoài cơ sở. Các nhà cung cấp và công nghệ đám mây riêng phổ biến bao gồm VMware và OpenStack.
+1. **Private cloud** : 
+    - Private cloud được cung cấp để sử dụng độc quyền bởi một tổ chức nhiều người dùng (ví dụ: các đơn vị kinh doanh). 
+    - Nó có thể được sở hữu, quản lý và vận hành bởi tổ chức, bên thứ 3 hoặc một số tổ hợp của họ và nó có thể tồn tại trong hoặc ngoài cơ sở. 
+    - Các nhà cung cấp và công nghệ đám mây riêng phổ biến bao gồm VMware và OpenStack.
 
-2. **Community cloud** : Hạ tầng cloud được cung cấp để sử dụng đặc quyền bởi một cộng đồng người dùng cụ thể từ các tổ chức có chung mối quan tâm (ví dụ: nhiệm vụ, yêu cầu bảo mật, chính sách và tuân thủ xem xét).
+2. **Public cloud** : 
+    - Public cloud là các dịch vụ trên nền tảng Cloud Computing để cho cá nhân và tổ chức thuê.
+    - Public Cloud được cung cấp cho người dùng bên ngoài internet.
+    - Nó có thể được sở hữu, quản lý và vận hành bởi một tổ chức kinh doanh, học thuật hoặc chính phủ hoặc sự kết hợp của nhiều tổ chức khác nhau. Nó tồn tại trong phạm vi của nhà cung cấp Cloud
+    - Các nhà cung cấp dịch vụ đám mây công cộng hàng đầu bao gồm Amazon Web Services (AWS), Microsoft Azure, IBM và Google Cloud Platform.
 
-    Nó có thể được sở hữu, quản lý và vận hành bởi một hoặc nhiều tổ chức trong cộng đồng, bên thứ 3 hoặc một số tổ hợp của họ và nó có thể tồn tại trong hoặc ngoài cơ sở.
+3. **Community cloud** : 
+    - Community cloud được cung cấp để sử dụng đặc quyền bởi một cộng đồng người dùng cụ thể từ các tổ chức có chung mối quan tâm (ví dụ: nhiệm vụ, yêu cầu bảo mật, chính sách và tuân thủ xem xét). Các tổ chức này chia sẻ cơ sở hạ tầng để thực hiện chung một số lợi ích của cloud
 
-3. **Public cloud** : Hạ tầng Cloud được cung cấp để sử dụng bởi cộng đồng. Nó có thể được sở hữu, quản lý và vận hành bởi một tổ chức kinh doanh, học thuật hoặc chính phủ hoặc sự kết hợp của nhiều tổ chức khác nhau. Nó tồn tại trong phạm vi của nhà cung cấp Cloud
+    - Nó có thể được sở hữu, quản lý và vận hành bởi một hoặc nhiều tổ chức trong cộng đồng, bên thứ 3 hoặc một số tổ hợp của họ và nó có thể tồn tại trong hoặc ngoài cơ sở.
 
-    Các nhà cung cấp dịch vụ đám mây công cộng hàng đầu bao gồm Amazon Web Services (AWS), Microsoft Azure, IBM và Google Cloud Platform.
+4. **Hybrid cloud** : 
+    - Hybrid cloud là sự kết hợp của public cloud và private cloud. Cho phép ta khai thác điểm mạnh của từng mô hình cũng như đưa ra phương thức sử dụng tối ưu cho người dùng.
 
-4. **Hybrid cloud** : Hạ tầng Cloud là một thành phần của 2 hoặc nhiều cơ sở hạ tầng Cloud riêng biệt (public, private hay community). Các hạ tầng riêng biệt vẫn là các thực thể duy nhất nhưng được ràng buộc với nhau bởi công nghệ được tiêu chuẩn hóa hoặc độc quyền cho phép tính di động của dữ liệu và ứng dụng (Ví dụ: cloud bùng nổ để cân bằng tải giữa các đám mây)
+    - Các hạ tầng riêng biệt vẫn là các thực thể duy nhất nhưng được ràng buộc với nhau bởi công nghệ được tiêu chuẩn hóa hoặc độc quyền cho phép tính di động của dữ liệu và ứng dụng (Ví dụ: cloud bùng nổ để cân bằng tải giữa các đám mây)
 
-    Mục tiêu của hybrid cloud là tạo ra một môi trường thống nhất, tự động, có thể mở rộng, tận dụng tất cả những gì cơ sở hạ tầng đám mây công cộng có thể cung cấp, trong khi vẫn duy trì quyền kiểm soát dữ liệu quan trọng.
+    - Mục tiêu của hybrid cloud là tạo ra một môi trường thống nhất, tự động, có thể mở rộng, tận dụng tất cả những gì cơ sở hạ tầng đám mây công cộng có thể cung cấp, trong khi vẫn duy trì quyền kiểm soát dữ liệu quan trọng.
