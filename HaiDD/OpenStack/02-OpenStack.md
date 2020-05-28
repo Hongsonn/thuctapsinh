@@ -39,6 +39,6 @@ OpenStack không phải là một dự án đơn lẻ mà là một nhóm các d
 
 - **Identity Server(code-name Keystone)**: quản lý xác thực cho user và projects.
 
-- **OpenStack Netwok (code-name Neutron)**: là thành phần quản lý network cho các máy ảo. Cung cấp chức năng network as a service. Đây là hệ thống có các tính chất pluggable, scalable và API-driven.
+- **OpenStack Network (code-name Neutron)**: là thành phần quản lý network cho các máy ảo. Cung cấp chức năng network as a service. Đây là hệ thống có các tính chất pluggable, scalable và API-driven.
 
 - **OpenStack dashboard (code-name Horizon)**: cung cấp cho người quản trị cũng như người dùng giao diện đồ họa để truy cập, cung cấp và tự động tài nguyên cloud. Việc thiết kế có thể mở rộng giúp dễ dàng thêm vào các sản phẩm cũng như dịch vụ ngoài như billing, monitoring và các công cụ giám sát khác.
