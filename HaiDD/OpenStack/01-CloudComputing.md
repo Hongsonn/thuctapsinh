@@ -5,6 +5,8 @@ Cloud computing là một thuật ngữ chung cho bất kỳ điều gì liên q
 
 Cloud computing là mô hình cho phép truy cập mạng theo yêu cầu phổ biến, thuận tiện, phổ biến vào nhóm tài nguyên điện toán có thể định cấu hình chung (ví dụ: mạng, máy chủ, storage, ứng dụng và dịch vụ) có thể nhanh chóng được cung cấp và phát hành với nỗ lực quản lý tối thiểu hoặc tương tác với nhà cung cấp dịch vụ.
 
+>**Khái quát:** Cloud computing là mô hình cung cấp tài nguyên máy tính (mạng, máy chủ, storage, ứng dụng,...) trên internet theo nhu cầu của người dùng.
+
 **Các dịch vụ được chia thành 3 loại chính:**
 - **Infrastructure as a service (IaaS)** : Cơ sở hạ tầng như một dịch vụ
 - **Platform as a service (PaaS)** : Nền tảng như một dịch vụ
@@ -24,7 +26,7 @@ Dù là public hay private, mục tiêu của cloud computing là cung cấp quy
 ## II. Mô hình Cloud 5-3-4
 
 ### 1. Đặc điểm thiết yếu (5 đặc điểm)
-1. **On-demand self-service** (Dịch vụ tự phục vụ theo yêu cầu) : Một khách hàng có thể đơn phương cung cấp các khả năng tính toán. Chẳng hạn như thời gian máy chủ và lưu trữ mạng, khi cần có thể tự yêu cầu theo nhu cầu mà không cần phải qua nhà cung cấp
+1. **On-demand self-service** (Dịch vụ tự phục vụ theo yêu cầu) : Khách hàng có thể tự quản lý, cài đặt, gia hạn, thay đổi cấu hình mà không cần phải thông qua nhà cung cấp
 
 2. **Broad network access** (Truy cập mạng rộng) : Khả năng có sẵn trên mạng và được truy cập thông qua các cơ chế tiêu chuẩn thúc đẩy sử dụng bởi các nền tảng máy khách (client platform) thin hoặc thick phức tạp. (ví dụ: điện thoại di động, máy tính bảng, laptop hay  máy trạm)
 
@@ -35,6 +37,8 @@ Dù là public hay private, mục tiêu của cloud computing là cung cấp quy
     Ý nghĩa của sự độc lập về vị trí là khách hàng thường không có quyền kiểm soát hoặc kiến thức về vị trí chính xác của các tài nguyên được cung cấp nhưng có thể chỉ định vị trí ở mức độ trừu tượng cao hơn (ví dụ: quốc gia, tiểu bang hoặc datacenter). Ví dụ về tài nguyên bao gồm storage, processing, memory và network bandwidth.
 
     Multi-tenancy cho phép nhiều khách hàng chia sẻ cùng một cơ sở hạ tầng vật lý hoặc cùng các ứng dụng, nhưng vẫn giữ được quyền riêng tư và bảo mật đối với dữ liệu của chính họ. Với việc tổng hợp tài nguyên, các nhà cung cấp đám mây phục vụ nhiều khách hàng từ các tài nguyên vật lý tương tự nhau. Nhóm tài nguyên của các nhà cung cấp đám mây phải rất lớn và đủ linh hoạt để họ có thể phục vụ các yêu cầu của nhiều khách hàng
+
+    Khách hàng được cung cấp tài nguyên có quyền tự phần chia, thiết lập trên khoảng tài nguyên đó
 
 4. **Rapid elasticity** (Tính đàn hồi nhanh) : Khả năng có thể được cung cấp và giải phóng một cách linh hoạt, trong một số trường hợp tự động, nhanh chóng mở rộng ra ngoài và thu vào tương ứng với yêu cầu.
 
@@ -77,18 +81,18 @@ Dù là public hay private, mục tiêu của cloud computing là cung cấp quy
     - Nó có thể được sở hữu, quản lý và vận hành bởi tổ chức, bên thứ 3 hoặc một số tổ hợp của họ và nó có thể tồn tại trong hoặc ngoài cơ sở. 
     - Các nhà cung cấp và công nghệ đám mây riêng phổ biến bao gồm VMware và OpenStack.
 
-2. **Public cloud** : 
+2. **Public cloud** :
     - Public cloud là các dịch vụ trên nền tảng Cloud Computing để cho cá nhân và tổ chức thuê.
     - Public Cloud được cung cấp cho người dùng bên ngoài internet.
     - Nó có thể được sở hữu, quản lý và vận hành bởi một tổ chức kinh doanh, học thuật hoặc chính phủ hoặc sự kết hợp của nhiều tổ chức khác nhau. Nó tồn tại trong phạm vi của nhà cung cấp Cloud
     - Các nhà cung cấp dịch vụ đám mây công cộng hàng đầu bao gồm Amazon Web Services (AWS), Microsoft Azure, IBM và Google Cloud Platform.
 
-3. **Community cloud** : 
+3. **Community cloud** :
     - Community cloud được cung cấp để sử dụng đặc quyền bởi một cộng đồng người dùng cụ thể từ các tổ chức có chung mối quan tâm (ví dụ: nhiệm vụ, yêu cầu bảo mật, chính sách và tuân thủ xem xét). Các tổ chức này chia sẻ cơ sở hạ tầng để thực hiện chung một số lợi ích của cloud
 
     - Nó có thể được sở hữu, quản lý và vận hành bởi một hoặc nhiều tổ chức trong cộng đồng, bên thứ 3 hoặc một số tổ hợp của họ và nó có thể tồn tại trong hoặc ngoài cơ sở.
 
-4. **Hybrid cloud** : 
+4. **Hybrid cloud** :
     - Hybrid cloud là sự kết hợp của public cloud và private cloud. Cho phép ta khai thác điểm mạnh của từng mô hình cũng như đưa ra phương thức sử dụng tối ưu cho người dùng.
 
     - Các hạ tầng riêng biệt vẫn là các thực thể duy nhất nhưng được ràng buộc với nhau bởi công nghệ được tiêu chuẩn hóa hoặc độc quyền cho phép tính di động của dữ liệu và ứng dụng (Ví dụ: cloud bùng nổ để cân bằng tải giữa các đám mây)
