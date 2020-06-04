@@ -7,10 +7,14 @@ Pritunl là phần mềm mã nguồn mở được sử dụng để ảo hóa V
 
 ## Mô hình
 
-<img src="">
+<img src="https://i.imgur.com/b0lcoe9.png">
+
+<img src="https://i.imgur.com/bmT3Ibs.png">
 
 ## Mục tiêu
 Khi sử dụng Cloud trên hệ thống Cloud365, người dùng hoàn toàn có thể setup hệ thống LAN private giữa các VM với nhau và đi ra ngoài theo 1 IP public duy nhất. Khi đó, người dùng có thể dùng Pritunl Server làm VPN Server để các Client connect vào, sau đó kết nối tới các máy ảo thông qua đường Private LAN.
+
+**Mục tiêu theo mô hình**: Từ Client ping được tới VM
 
 ## Cấu hình
 ### 1. Cài đặt server
@@ -126,3 +130,50 @@ sudo systemctl enable mongod pritunl
 11. Click **Start Server**
 
     <img src="https://i.imgur.com/wfQQIxb.png">
+
+## 3. Cấu hình Client
+Link tải các gói client: https://github.com/pritunl/pritunl-client/releases
+
+1. Tại mục User -> Chọn biểu tượng như hình
+
+    <img src="https://i.imgur.com/Xuwe6QB.png">
+
+2. Truy cập đường dẫn tại mục `Temporary url to view profile links, expires after 24 hours`
+
+    <img src="https://i.imgur.com/vFMB1mZ.png">
+
+3. Trên tab mới mở ra, ta chọn **Download Client**
+
+    <img src="https://i.imgur.com/YpmBcFR.png">
+
+4. Tại đây, ta có thể chọn hệ điều hành của Client để thiết lập. Trong bài này, ta dùng Windown nên sẽ tải file cài đặt về **Download installer**. Copy Profile URI Link
+
+    <img src="https://i.imgur.com/MbQdoKW.png">
+
+5. Sau khi cài đặt, và khởi động, ta chọn **Import Profile URI**
+
+    <img src="https://i.imgur.com/5r9APLe.png">
+
+6. DÁn link vào ô đường dẫn vào chọn **Import**
+
+    <img src="https://i.imgur.com/Kftxg3c.png">
+
+7. Chọn biểu tượng như hình
+    
+    <img src= "https://i.imgur.com/RUZWOT8.png">
+
+8. Chọn **Connect**
+
+    <img src="https://i.imgur.com/bnr2Ayy.png">
+
+9. Nhập mã PIN và chọn **OK**
+
+    <img src="https://i.imgur.com/5tL2xvY.png">
+
+10. Đợi vài giây sẽ thấy Client Address là IP dải ta tạo trên Pritunl Server là thành công
+
+    <img src="https://i.imgur.com/iJjBPM2.png">
+
+11. Ping thử tới VM trong dải mảng Private OK.
+
+    <img src="https://i.imgur.com/rsyuEzb.png">
