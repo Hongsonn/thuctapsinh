@@ -131,7 +131,7 @@ sudo systemctl enable mongod pritunl
 
     <img src="https://i.imgur.com/wfQQIxb.png">
 
-## 3. Cấu hình Client
+## 3.1. Cấu hình Client trên Windown
 Link tải các gói client: https://github.com/pritunl/pritunl-client/releases
 
 1. Tại mục User -> Chọn biểu tượng như hình
@@ -177,3 +177,35 @@ Link tải các gói client: https://github.com/pritunl/pritunl-client/releases
 11. Ping thử tới VM trong dải mảng Private OK.
 
     <img src="https://i.imgur.com/rsyuEzb.png">
+
+## 3.2. Cấu hình Client trên Linux
+Cài đặt theo tùy OS tại đây: https://client.pritunl.com/#install
+
+CentOS-7
+```
+sudo tee -a /etc/yum.repos.d/pritunl.repo << EOF
+[pritunl]
+name=Pritunl Stable Repository
+baseurl=https://repo.pritunl.com/stable/yum/centos/7/
+gpgcheck=1
+enabled=1
+EOF
+
+gpg --keyserver hkp://keyserver.ubuntu.com --recv-keys 7568D9BB55FF9E5287D586017AE645C0CF8E292A
+
+gpg --armor --export 7568D9BB55FF9E5287D586017AE645C0CF8E292A > key.tmp; sudo rpm --import key.tmp; rm -f key.tmp
+
+sudo yum install pritunl-client-gtk
+```
+
+Sau khi cài đặt xong, ta tải file profile về máy.
+
+Trên Linux server thì nên bật Byobu:
+- Chạy lệnh sau:
+    ```
+    openvpn --config <đường_dẫn_file_profile>
+    ```
+
+- Nhập user/password
+
+- Ping thử vào dải private của VPN OK.
