@@ -209,3 +209,10 @@ Trên Linux server thì nên bật Byobu:
 - Nhập user/password
 
 - Ping thử vào dải private của VPN OK.
+
+
+## Lưu ý
+Để redirect gateway. Thêm dòng sau vào file cấu hình
+```
+redirect-gateway def1
+```
