@@ -11,7 +11,7 @@ USERID=""
 # API Token bot
 TOKEN=""
 
-TIMEOUT="10"
+TIMEOUT="20"
 
 # URL gửi tin nhắn của bot
 URL="https://api.telegram.org/bot$TOKEN/sendMessage"
