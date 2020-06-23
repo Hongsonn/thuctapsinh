@@ -1,10 +1,18 @@
 #!/bin/bash
 
-# TODO:
-# - Cảnh báo qua Slack
-# - Check IP login để chỉnh lại tin nhắn cảnh báo khi lấy thông tin từ ipinfo.io
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# Sử dụng:
+# Lưu script theo đường dẫn /opt/sshLoginMonitor_v2.sh
+# Thêm dòng sau "/opt/sshLogin.sh" (bỏ dấu ngoặc kép) & vào file: /etc/ssh/sshrc (nếu chưa có thì tạo)
+# Cấp quyền thực thi cho script: chmod +x /opt/sshLogin.sh
 
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# TODO:                                                                          #
+# - Cảnh báo qua Slack                                                           #
+# - Check IP login để chỉnh lại tin nhắn cảnh báo khi lấy thông tin từ ipinfo.io #
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
+# Điều kiện, thực thi lần lượt các lệnh
 set -e;
 
 # ID chat Telegram
