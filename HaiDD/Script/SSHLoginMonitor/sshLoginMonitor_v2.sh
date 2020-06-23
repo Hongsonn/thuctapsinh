@@ -16,10 +16,10 @@
 set -e;
 
 # ID chat Telegram
-USERID="-456008539"
+USERID=""
 
 # API Token bot
-TOKEN="936053035:AAGbl5y7463f0BCCx4RjzpB3_eRhUUNfKKw"
+TOKEN=""
 
 TIMEOUT="20"
 
