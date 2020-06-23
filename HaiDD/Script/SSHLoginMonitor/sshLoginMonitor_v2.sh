@@ -4,6 +4,7 @@
 # Lưu script theo đường dẫn /opt/sshLoginMonitor_v2.sh
 # Thêm dòng sau "/opt/sshLogin.sh" (bỏ dấu ngoặc kép) & vào file: /etc/ssh/sshrc (nếu chưa có thì tạo)
 # Cấp quyền thực thi cho script: chmod +x /opt/sshLogin.sh
+# Chỉnh sửa lại UUID, TOKEN Telegram
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
