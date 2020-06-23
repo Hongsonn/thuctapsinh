@@ -43,7 +43,7 @@
     chmod +x /opt/sshLoginMonitor_v2.sh
     ```
 
-- Thêm vào file `/etc/ssh/sshrc`
+- Thêm dòng sau vào file `/etc/ssh/sshrc`
     ```
     /opt/sshLoginMonitor_v2.sh &
     ```
