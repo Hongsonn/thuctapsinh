@@ -34,7 +34,6 @@ DATE_EXEC="$(date "+%d %b %Y %H:%M")"
 
 # File temp
 TMPFILE='/tmp/ipinfo.txt'
-echo "" > $TMPFILE
 
 if [ -n "$SSH_CLIENT" ]; then
     IP=$(echo $SSH_CLIENT | awk '{print $1}')
@@ -56,5 +55,5 @@ if [ -n "$SSH_CLIENT" ]; then
     curl -s -X POST --max-time $TIMEOUT $URL -d "chat_id=$USERID" -d text="$TEXT" > /dev/null
 
     # Xóa file temp khi script thực hiện xong
-    rm $TMPFILE
+    rm -f $TMPFILE
 fi
