@@ -57,16 +57,16 @@ Thay đổi API Token bot và ID nhận cảnh báo trong Script thành của b�
 
 Hoặc chạy 2 lệnh sau với API Token bot và ID nhận cảnh báo của bạn:
 ```
-sed -i 's|USERID=""|USERID="<ID Chat nhận cảnh báo>"|' /etc/profile.d/sshLoginMonitor.sh
+sed -i 's|USERID=""|USERID="<ID Chat nhận cảnh báo>"|' /opt/sshLoginMonitor_v2.sh
 
-sed -i 's|TOKEN=""|TOKEN="<API Token bot>"|' /etc/profile.d/sshLoginMonitor.sh
+sed -i 's|TOKEN=""|TOKEN="<API Token bot>"|' /opt/sshLoginMonitor_v2.sh
 ```
 
 **Ví dụ:**
 ```
-sed -i 's|USERID=""|USERID="-12837873492"|' /etc/profile.d/sshLoginMonitor.sh
+sed -i 's|USERID=""|USERID="-12837873492"|' /opt/sshLoginMonitor_v2.sh
 
-sed -i 's|TOKEN=""|TOKEN="132907487sadkaAAABE:dao"|' /etc/profile.d/sshLoginMonitor.sh
+sed -i 's|TOKEN=""|TOKEN="132907487sadkaAAABE:dao"|' /opt/sshLoginMonitor_v2.sh
 ```
 
 
