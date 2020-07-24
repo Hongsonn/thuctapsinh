@@ -17,7 +17,7 @@
 
     <img src="..\images\Screenshot_28.png">
 
-> ### Snapshot lại bản ban đầu
+> ### Snapshot VM
 <img src="..\images\Screenshot_29.png">
 
 - Sang tab Setting -> Disk -> Mount file ISO Ubuntu 20.04
@@ -85,7 +85,7 @@
 - Remove CD ROM: Setting -> Disk -> Umount
     <img src="..\images\Screenshot_35.png">
 
-> ### Snapshot
+> ## Snapshot VM
 <img src="..\images\Screenshot_36.png">
 
 
@@ -215,7 +215,7 @@ Bật máy ảo, truy cập bằng tài user `ubuntu` và bắt đầu thực hi
 
 - Cài đặt các gói 
     ```
-    apt -y install cloud-init linux-virtual pollinate
+    apt -y install linux-virtual pollinate
     ```
 
 - Cấu hình file grub để instance báo log ra console và đổi name Card mạng về eth* thay vì ens, eno
@@ -253,9 +253,108 @@ Bật máy ảo, truy cập bằng tài user `ubuntu` và bắt đầu thực hi
 ```
 apt-get install netplug -y
 
-wget https://raw.githubusercontent.com/uncelvel/create-images-openstack/master/scripts_all/netplug_ubuntu -O netplug
+wget https://raw.githubusercontent.com/danghai1996/thuctapsinh/master/HaiDD/CreateImage/scripts/netplug_ubuntu -O netplug
 
 mv netplug /etc/netplug/netplug
 
 chmod +x /etc/netplug/netplug
 ```
+
+### Cài đặt cloud-init và cấu hình user default
+```
+apt-get install -y cloud-init
+
+sed -i 's/name: ubuntu/name: root/g' /etc/cloud/cloud.cfg
+```
+
+### Disable default config route
+```
+sed -i 's|link-local 169.254.0.0|#link-local 169.254.0.0|g' /etc/networks
+```
+
+### Cài đặt qemu-agent
+**Chú ý:** qemu-guest-agent là một daemon chạy trong máy ảo, giúp quản lý và hỗ trợ máy ảo khi cần (có thể cân nhắc việc cài thành phần này lên máy ảo)
+
+Để có thể thay đổi password máy ảo bằng nova-set password thì phiên bản qemu-guest-agent phải >= 2.5.0
+```
+apt-get install software-properties-common -y
+apt-get update -y
+apt-get install qemu-guest-agent -y
+service qemu-guest-agent start
+```
+
+Kiểm tra phiên bản qemu-ga bằng lệnh:
+```
+qemu-ga --version
+service qemu-guest-agent status
+```
+
+### Cấu hình datasource
+Bỏ chọn mục NoCloud bằng cách dùng dấu SPACE, sau đó ấn ENTER
+```
+dpkg-reconfigure cloud-init
+```
+
+<img src="..\images\Screenshot_39.png">
+
+### Clean cấu hình và restart service
+**Lưu ý:** Việc restart có thể mất 2-3 phút hoặc hơn
+```
+cloud-init clean
+systemctl restart cloud-init
+systemctl enable cloud-init
+systemctl status cloud-init
+```
+
+Clear toàn bộ history
+```
+apt-get clean all
+rm -f /var/log/wtmp /var/log/btmp
+history -c
+```
+
+### Tắt máy
+Tắt máy trên WebvirtCloud:
+
+<img src="..\images\Screenshot_40.png">
+
+
+> ## Snapshot VM
+<img src="..\images\Screenshot_41.png">
+
+
+# Bước 2: Thực hiện trên host KVM
+Sử dụng lệnh `virt-sysprep` để xóa toàn bộ thông tin máy ảo:
+```
+virt-sysprep -d OPS_Ubuntu_2004
+```
+
+Dùng lệnh sau để tối ưu kích thước image:
+```
+virt-sparsify --compress --convert qcow2 /var/lib/libvirt/images/OPS_Ubuntu_2004.qcow2 OPS_Ubuntu_2004
+```
+
+**Lưu ý:** đường dẫn và tên image
+
+# Bước 3: Upload image lên OPS
+Upload image lên sử dụng
+
+<img src="..\images\Screenshot_42.png">
+
+**Chú ý:**
+- Thêm metadata `hw_qemu_guest_agent=yes`
+
+<img src="..\images\Screenshot_43.png">
+
+# Bước 4: Tạo VM từ image
+Tạo VM và thêm config:
+```
+#cloud-config
+password: hai1996
+chpasswd: {expire: False}
+ssh_pwauth: True
+```
+
+<img src="..\images\Screenshot_44.png">
+
+**Lưu ý:** Sử dụng mật khẩu tùy chọn
