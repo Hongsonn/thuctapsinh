@@ -120,7 +120,7 @@
     update-grub
     ```
 
-### Cấu hình network sử dụng ifupdown thay vì netplan
+### 2.1. Cấu hình network sử dụng ifupdown thay vì netplan
 - Disable netplan
     ```
     apt-get --purge remove netplan.io -y
@@ -143,7 +143,7 @@
 
 - Reboot máy, kiểm tra card eth0
 
-### Để sau khi boot máy ảo, có thể nhận đủ các NIC gắn vào:
+### 2.2. Để sau khi boot máy ảo, có thể nhận đủ các NIC gắn vào:
 ```
 apt-get install netplug -y
 
@@ -154,7 +154,7 @@ mv netplug /etc/netplug/netplug
 chmod +x /etc/netplug/netplug
 ```
 
-### Disable snapd service:
+### 2.3. Disable snapd service:
 Kiểm tra snap:
 ```
 df -H
@@ -198,12 +198,13 @@ tmpfs           414M     0  414M   0% /run/user/0
 > ## Snapshot VM -> OS_Ubuntu1804
 
 ## 3. Cài đặt Jitsi
-### Đặt hostname
+### 3.1. Đặt hostname
 ```
 hostnamectl set-hostname jitsimeet
+bash
 ```
 
-### Cài đặt OpenJDK Java Runtime Environment (JRE) 8
+### 3.2. Cài đặt OpenJDK Java Runtime Environment (JRE) 8
 Enable repo universe nếu chưa được kích hoạt
 ```
 sudo add-apt-repository universe
@@ -225,14 +226,14 @@ echo "JAVA_HOME=$(readlink -f /usr/bin/java | sed "s:bin/java::")" | sudo tee -a
 source /etc/profile
 ```
 
-### Cài đặt Nginx
+### 3.3. Cài đặt Nginx
 ```
 sudo apt install -y nginx
 sudo systemctl start nginx.service
 sudo systemctl enable nginx.service
 ```
 
-### Cài đặt Jitsi Meet
+### 3.4. Cài đặt Jitsi Meet
 Cài Jitsi repo:
 ```
 cd
@@ -250,6 +251,95 @@ apt-get install jicofo=1.0-541-1 jitsi-meet=2.0.4384-1 jitsi-meet-prosody=1.0.39
 
 Trong quá trình cài đặt, sẽ được yêu cầu điền hostname. Tại đó, điền IP máy chủ
 
-Sau đó, ta sẽ được hỏi về SSL cert: -> Chọn `I want to use my own certificate`
+Sau đó, ta sẽ được hỏi về SSL cert: -> Chọn `Generate a new self-signed certificate (You will later get a chance to obtain a Let’s Encrypt certificate)`
 
-Generate a new self-signed certificate (You will later get a chance to obtain a Let’s Encrypt certificate).
+
+Restart các service:
+```
+systemctl start prosody
+systemctl enable prosody
+
+systemctl start jicofo
+systemctl enable jicofo
+
+systemctl start jitsi-videobridge2.service
+systemctl enable jitsi-videobridge2
+
+systemctl restart nginx
+```
+
+Truy cập bằng IP của máy ảo
+
+<img src="..\images\Screenshot_76.png">
+
+## 4. Cài đặt các tính năng thêm cho Jitsi
+### 4.1. Tắt tự động đặt tên phòng
+Vào file `/usr/share/jitsi-meet/interface_config.js`, tìm đến dòng `GENERATE_ROOMNAMES_ON_WELCOME_PAGE` sửa giá trị true thành `false`.
+```
+sed -i 's|GENERATE_ROOMNAMES_ON_WELCOME_PAGE: true,|GENERATE_ROOMNAMES_ON_WELCOME_PAGE: false,|g' /usr/share/jitsi-meet/interface_config.js
+```
+
+### 4.2. Yêu cầu người dùng nhập tên trước khi vào phòng họp
+Vào file `/etc/jitsi/meet/<domain>-config.js`. Ở đây là IP: `/etc/jitsi/meet/10.10.30.188-config.js`, uncomment dòng sau: `requireDisplayName: true,`
+```
+sed -i 's|// requireDisplayName: true,|requireDisplayName: true,|g' /etc/jitsi/meet/10.10.30.188-config.js
+```
+
+### 4.3. Cấu hình để người dùng mobile truy cập được vào bằng trình duyệt
+Vào file `/etc/jitsi/meet/<domain>-config.js`. Ở đây là IP: `/etc/jitsi/meet/10.10.30.188-config.js`, uncomment và sửa dòng `disableDeepLinking: true,`
+```
+sed -i 's|// disableDeepLinking: false,|disableDeepLinking: true,|g' /etc/jitsi/meet/10.10.30.188-config.js
+```
+
+### 4.4. Tắt âm thanh của người vào phòng khi họ mới vào
+Vào file `/etc/jitsi/meet/<domain>-config.js`. Ở đây là IP: `/etc/jitsi/meet/10.10.30.188-config.js` uncomment và sửa dòng `startWithAudioMuted`
+```
+sed -i 's|// startWithAudioMuted: false,|startWithAudioMuted: true,|g' /etc/jitsi/meet/10.10.30.188-config.js
+```
+
+### 4.5. Tắt camera của người vào phòng khi họ mới vào
+Vào file `/etc/jitsi/meet/<domain>-config.js`. Ở đây là IP: `/etc/jitsi/meet/10.10.30.188-config.js`, uncomment và sửa dòng `startWithVideoMuted`
+```
+sed -i 's|// startWithVideoMuted: false,|startWithVideoMuted: true,|g' /etc/jitsi/meet/10.10.30.188-config.js
+```
+
+### 4.6. Tắt audio level
+Vào file `/etc/jitsi/meet/<domain>-config.js`.  Ở đây là IP: `/etc/jitsi/meet/10.10.30.188-config.js`, uncomment và sửa dòng `disableAudioLevels`
+```
+sed -i 's|// disableAudioLevels: false,|disableAudioLevels: true,|g' /etc/jitsi/meet/10.10.30.188-config.js
+```
+
+### 4.7. Tắt làm mờ background video
+Vào file `/usr/share/jitsi-meet/interface_config.js`, sửa dòng: `DISABLE_VIDEO_BACKGROUND`
+```
+sed -i 's|DISABLE_VIDEO_BACKGROUND: false,|DISABLE_VIDEO_BACKGROUND: true,|g' /usr/share/jitsi-meet/interface_config.js
+```
+
+Sau đó, xóa `videobackgroundblur` tại mục `TOOLBAR_BUTTONS` để bỏ chức năng làm mờ background đi
+```
+sed -i "s|'videobackgroundblur',||g" /usr/share/jitsi-meet/interface_config.js
+```
+
+### 4.8. Tắt hoạt ảnh feedback
+Sửa các dòng ở file `/usr/share/jitsi-meet/interface_config.js`
+```
+sed -i 's|DISABLE_FOCUS_INDICATOR: false,|DISABLE_FOCUS_INDICATOR: true,|g' /usr/share/jitsi-meet/interface_config.js
+
+sed -i 's|DISABLE_DOMINANT_SPEAKER_INDICATOR: false,|DISABLE_DOMINANT_SPEAKER_INDICATOR: true,|g' /usr/share/jitsi-meet/interface_config.js
+```
+
+### 4.9. Cài đặt ngôn ngữ mặc định là tiếng Việt
+Đổi ngôn ngữ mặc định thành tiếng Việt:
+```
+sed -i "s|// defaultLanguage: 'en',|defaultLanguage: 'vi',|g" /etc/jitsi/meet/10.10.30.188-config.js
+```
+
+Tải file tiếng việt đã được custom lại tại: https://github.com/cloud365vn/NH-Jitsi/blob/master/lang/main-vi.json
+
+Thay thế nội dung file `/usr/share/jitsi-meet/lang/main-vi.json` bằng file tải về
+```
+cat file_main-vi.json-custom  > /usr/share/jitsi-meet/lang/main-vi.json
+
+# Xóa file custom
+rm -f file_main-vi.json-custom
+```
