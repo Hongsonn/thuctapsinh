@@ -334,7 +334,7 @@ sed -i 's|DISABLE_DOMINANT_SPEAKER_INDICATOR: false,|DISABLE_DOMINANT_SPEAKER_IN
 sed -i "s|// defaultLanguage: 'en',|defaultLanguage: 'vi',|g" /etc/jitsi/meet/10.10.30.188-config.js
 ```
 
-Tải file tiếng việt đã được custom lại tại: https://github.com/cloud365vn/NH-Jitsi/blob/master/lang/main-vi.json
+Tải file tiếng việt đã được chỉnh sửa lại tại: https://github.com/cloud365vn/NH-Jitsi/blob/master/lang/main-vi.json
 
 Thay thế nội dung file `/usr/share/jitsi-meet/lang/main-vi.json` bằng file tải về
 ```
