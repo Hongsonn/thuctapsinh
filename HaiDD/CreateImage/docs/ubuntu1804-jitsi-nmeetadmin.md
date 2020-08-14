@@ -343,3 +343,131 @@ cat file_main-vi.json-custom  > /usr/share/jitsi-meet/lang/main-vi.json
 # Xóa file custom
 rm -f file_main-vi.json-custom
 ```
+
+### 4.10. Cấu hình crontab để xóa các user ảo tồn đọng trên hệ thống
+Tạo một script
+```
+cat << EOF >> /bin/restartJitsiService.sh
+#!/bin/bash
+DATE=\$(date "+%T %d/%m/%Y")
+ 
+/etc/init.d/jicofo restart
+/etc/init.d/prosody restart
+/etc/init.d/jitsi-videobridge2 restart
+ 
+echo "Da thuc hien Script restart vao luc $DATE" >> /var/log/jitsi/scriptRestart.log
+EOF
+```
+Sau đó phân quyền cho script:
+```
+chmod +x /bin/restartJitsiService.sh
+```
+Kiểm tra:
+
+```
+ll /bin/ | grep restartJitsiService.sh
+```
+
+Cấu hình crontab để chạy script vào 12h trưa và 12h đêm hằng ngày. Mở crontab:
+```
+crontab -e
+```
+
+Thêm vào dòng sau:
+```
+00 00,12 * * * /bin/restartJitsiService.sh
+```
+
+## 5. Cài đặt MeetnowAdmin cho Jitsi
+Cài đặt theo tài liệu:
+
+https://github.com/cloud365vn/NH-Jitsi/blob/development/docs/jitsi-ubuntu-deploy.md
+
+> ## Snap shot > jitsi-admin
+
+## 6. Cài đặt qemu-agent
+Chú ý: `qemu-guest-agent` là một daemon chạy trong máy ảo, giúp quản lý và hỗ trợ máy ảo khi cần (có thể cân nhắc việc cài thành phần này lên máy ảo)
+
+Để có thể thay đổi password máy ảo bằng nova-set password thì phiên bản `qemu-guest-agent` phải `>= 2.5.0`
+```
+apt-get install software-properties-common -y
+apt-get update -y
+apt-get install qemu-guest-agent -y
+service qemu-guest-agent start
+```
+
+Kiểm tra phiên bản qemu-ga bằng lệnh:
+```
+qemu-ga --version
+service qemu-guest-agent status
+```
+
+## 7. Cài đặt CMD Log
+```
+curl -Lso- https://raw.githubusercontent.com/nhanhoadocs/ghichep-cmdlog/master/cmdlog.sh | bash
+```
+
+## 8. Để máy ảo khi boot sẽ tự giãn phân vùng theo dung lượng mới, ta cài các gói sau:
+```
+sudo apt-get install cloud-utils cloud-initramfs-growroot -y
+```
+
+## 9. Cài đặt gói Cloud-init
+Cài đặt cloud-init
+```
+apt-get install -y cloud-init
+```
+
+Cấu hình user mặc định
+```
+sed -i 's/name: ubuntu/name: root/g' /etc/cloud/cloud.cfg
+```
+
+Disable default config route
+```
+sed -i 's|link-local 169.254.0.0|#link-local 169.254.0.0|g' /etc/networks
+```
+
+Cấu hình datasource, bỏ chọn mục NoCloud bằng cách dùng dấu SPACE, sau đó ấn ENTER
+```
+dpkg-reconfigure cloud-init
+```
+
+<img src="..\images\Screenshot_39.png">
+
+Clean cấu hình và restart service
+```
+cloud-init clean
+systemctl restart cloud-init
+systemctl enable cloud-init
+systemctl status cloud-init
+```
+
+## 10. Xóa các user của trang quản trị admin
+Truy cập đường dẫn:
+```
+<địa_chỉ_IP>:8080/admin
+```
+
+<img src="..\images\Screenshot_77.png">
+
+Chọn mục User:
+
+<img src="..\images\Screenshot_78.png">
+
+Chọn tất cả User -> Xóa user
+
+<img src="..\images\Screenshot_79.png">
+
+Chọn **Yes, I'm sure**
+
+<img src="..\images\Screenshot_80.png">
+
+## 11. Dọn dẹp
+Clear toàn bộ history
+```
+apt-get clean all
+rm -f /var/log/wtmp /var/log/btmp
+history -c
+> /var/log/cmdlog.log
+```
