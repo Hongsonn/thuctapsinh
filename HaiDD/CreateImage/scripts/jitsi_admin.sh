@@ -122,4 +122,4 @@ systemctl restart jitsi-videobridge2
 
 source /opt/env/bin/activate
 /opt/env/bin/python /opt/NH-Jitsi/manage.py update_domain --settings=project.settings.thanhnb02
-echo "from users.models import User; User.objects.create_superuser('admin', 'admin@$NEW_DOMAIN', '123456789')" | /opt/env/bin/python /opt/NH-Jitsi/manage.py shell
+echo "from users.models import User; User.objects.create_superuser('admin', 'admin@$NEW_DOMAIN', '$1')" | /opt/env/bin/python /opt/NH-Jitsi/manage.py shell
