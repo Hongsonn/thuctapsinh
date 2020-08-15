@@ -444,24 +444,9 @@ systemctl status cloud-init
 ```
 
 ## 10. Xóa các user của trang quản trị admin
-Truy cập đường dẫn:
 ```
-<địa_chỉ_IP>:8080/admin
+echo "from users.models import User; User.objects.all().delete()" | /opt/env/bin/python /opt/NH-Jitsi/manage.py shell
 ```
-
-<img src="..\images\Screenshot_77.png">
-
-Chọn mục User:
-
-<img src="..\images\Screenshot_78.png">
-
-Chọn tất cả User -> Xóa user
-
-<img src="..\images\Screenshot_79.png">
-
-Chọn **Yes, I'm sure**
-
-<img src="..\images\Screenshot_80.png">
 
 ## 11. Dọn dẹp
 Clear toàn bộ history
