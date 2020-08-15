@@ -2,6 +2,10 @@
 
 ## Thực hiện:
 - Đóng image trên KVM
+- Cấu hình ban đầu: 
+    - RAM: 2 GB
+    - Disk: 10 GB
+    - CPU: 2
 
 ## Thông số cài đặt:
 - OS: Ubuntu 18.04 LTS
