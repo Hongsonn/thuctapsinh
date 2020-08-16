@@ -2,6 +2,10 @@
 
 ## Thực hiện:
 - Đóng image trên KVM
+- Cấu hình ban đầu: 
+    - RAM: 2 GB
+    - Disk: 10 GB
+    - CPU: 2
 
 ## Thông số cài đặt:
 - OS: Ubuntu 18.04 LTS
@@ -421,30 +425,65 @@ systemctl status cloud-init
 ```
 
 ## 10. Xóa các user của trang quản trị admin
-Truy cập đường dẫn:
 ```
-<địa_chỉ_IP>:8080/admin
+echo "from users.models import User; User.objects.all().delete()" | /opt/env/bin/python /opt/NH-Jitsi/manage.py shell
 ```
-
-<img src="..\images\Screenshot_77.png">
-
-Chọn mục User:
-
-<img src="..\images\Screenshot_78.png">
-
-Chọn tất cả User -> Xóa user
-
-<img src="..\images\Screenshot_79.png">
-
-Chọn **Yes, I'm sure**
-
-<img src="..\images\Screenshot_80.png">
 
 ## 11. Dọn dẹp
-Clear toàn bộ history
+Đổi tất cả IP về một biến: `ip.address.vm`
 ```
+bash /opt/NH-Jitsi/scripts/jitsi_change_domain.sh ip.address.vm
+
+sed -Ei "s|10.10.30.188|ip.address.vm|g" /etc/nginx/sites-available/nmeet-admin
+
+source /opt/env/bin/activate
+/opt/env/bin/python /opt/NH-Jitsi/manage.py update_domain --settings=project.settings.thanhnb02
+```
+
+Clear toàn bộ history, các file log
+```
+source .bashrc
 apt-get clean all
 rm -f /var/log/wtmp /var/log/btmp
+
+> /var/log/prosody/prosody.log
+> /var/log/prosody/prosody.err
+> /var/log/jitsi/jicofo.log
+> /var/log/jitsi/jvb.log
+> /var/log/jitsi/scriptRestart.log
+
 history -c
+> /root/.bash_history
 > /var/log/cmdlog.log
+```
+
+## 12. Tắt VM, snapshot `jitsi-admin-v1`
+
+## Thực hiện trên Host KVM
+### Bước 1: Xử dụng lệnh `virt-sysprep` để xóa toàn bộ các thông tin máy ảo
+```
+virt-sysprep -d haidd-jitsi-admin
+```
+
+### Bước 2: Tối ưu kích thước image:
+```
+virt-sparsify --compress --convert qcow2 /kvm/haidd-jitsi-admin.qcow2 U18-Jitsi-Admin
+```
+
+### Bước 3: Upload image với metatdata
+```
+hw_qemu_guest_agent=yes
+```
+
+### Bước 4: Cloud-init
+```conf
+#cloud-config
+password: '{vps_password}'
+chpasswd: { expire: False }
+ssh_pwauth: True
+runcmd:
+    - curl https://raw.githubusercontent.com/danghai1996/thuctapsinh/master/HaiDD/CreateImage/scripts/jitsi_admin.sh -o /tmp/jitsi_admin.sh
+    - chmod +x /tmp/jitsi_admin.sh
+    - bash /tmp/jitsi_admin.sh {vps_da_password}
+    - rm -f /tmp/jitsi_admin.sh
 ```
