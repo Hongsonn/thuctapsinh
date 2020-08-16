@@ -282,25 +282,25 @@ Cài đặt theo tài liệu:
 https://github.com/cloud365vn/NH-Jitsi/blob/development/docs/jitsi-ubuntu-deploy.md
 
 ## 5. Cài đặt các tính năng thêm cho Jitsi
-### 4.1. Tắt tự động đặt tên phòng
+### 5.1. Tắt tự động đặt tên phòng
 Vào file `/usr/share/jitsi-meet/interface_config.js`, tìm đến dòng `GENERATE_ROOMNAMES_ON_WELCOME_PAGE` sửa giá trị true thành `false`.
 ```
 sed -i 's|GENERATE_ROOMNAMES_ON_WELCOME_PAGE: true,|GENERATE_ROOMNAMES_ON_WELCOME_PAGE: false,|g' /usr/share/jitsi-meet/interface_config.js
 ```
 
-### 4.2. Cấu hình để người dùng mobile truy cập được vào bằng trình duyệt
+### 5.2. Cấu hình để người dùng mobile truy cập được vào bằng trình duyệt
 Vào file `/etc/jitsi/meet/<domain>-config.js`. Ở đây là IP: `/etc/jitsi/meet/10.10.30.188-config.js`, thêm dòng 
 ```
 disableDeepLinking: true,
 ```
 
-### 4.3. Tắt camera của người vào phòng khi họ mới vào
+### 5.3. Tắt camera của người vào phòng khi họ mới vào
 Vào file `/etc/jitsi/meet/<domain>-config.js`. Ở đây là IP: `/etc/jitsi/meet/10.10.30.188-config.js`, thêm dòng 
 ```
 startWithVideoMuted: true,
 ```
 
-### 4.4. Tắt làm mờ background video
+### 5.4. Tắt làm mờ background video
 Vào file `/usr/share/jitsi-meet/interface_config.js`, sửa dòng: `DISABLE_VIDEO_BACKGROUND`
 ```
 sed -i 's|DISABLE_VIDEO_BACKGROUND: false,|DISABLE_VIDEO_BACKGROUND: true,|g' /usr/share/jitsi-meet/interface_config.js
@@ -311,7 +311,7 @@ Sau đó, xóa `videobackgroundblur` tại mục `TOOLBAR_BUTTONS` để bỏ ch
 sed -i "s|'videobackgroundblur',||g" /usr/share/jitsi-meet/interface_config.js
 ```
 
-### 4.5. Tắt hoạt ảnh feedback
+### 5.5. Tắt hoạt ảnh feedback
 Sửa các dòng ở file `/usr/share/jitsi-meet/interface_config.js`
 ```
 sed -i 's|DISABLE_FOCUS_INDICATOR: false,|DISABLE_FOCUS_INDICATOR: true,|g' /usr/share/jitsi-meet/interface_config.js
@@ -319,7 +319,7 @@ sed -i 's|DISABLE_FOCUS_INDICATOR: false,|DISABLE_FOCUS_INDICATOR: true,|g' /usr
 sed -i 's|DISABLE_DOMINANT_SPEAKER_INDICATOR: false,|DISABLE_DOMINANT_SPEAKER_INDICATOR: true,|g' /usr/share/jitsi-meet/interface_config.js
 ```
 
-### 4.6. Update file tiếng Việt
+### 5.6. Update file tiếng Việt
 Tải file tiếng việt đã được chỉnh sửa lại tại: https://github.com/cloud365vn/NH-Jitsi/blob/master/lang/main-vi.json
 
 Thay thế nội dung file `/usr/share/jitsi-meet/lang/main-vi.json` bằng file tải về
@@ -330,7 +330,7 @@ cat file_main-vi.json-custom  > /usr/share/jitsi-meet/lang/main-vi.json
 rm -f file_main-vi.json-custom
 ```
 
-### 4.7. Cấu hình crontab để xóa các user ảo tồn đọng trên hệ thống
+### 5.7. Cấu hình crontab để xóa các user ảo tồn đọng trên hệ thống
 Tạo một script
 ```
 cat << EOF >> /bin/restartJitsiService.sh
