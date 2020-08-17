@@ -117,7 +117,7 @@ add-apt-repository ppa:certbot/certbot <<EOF
 
 EOF
 
-apt install python-certbot-nginx -y
+apt install certbot
 
 # Start service
 systemctl start nginx
