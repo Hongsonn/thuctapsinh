@@ -281,6 +281,11 @@ Cài đặt theo tài liệu:
 
 https://github.com/cloud365vn/NH-Jitsi/blob/development/docs/jitsi-ubuntu-deploy.md
 
+Tắt chế độ Debug
+```
+sed -i 's|DEBUG = True|DEBUG = False|g' /opt/NH-Jitsi/project/settings/base.py
+```
+
 ## 5. Cài đặt các tính năng thêm cho Jitsi
 ### 5.1. Tắt tự động đặt tên phòng
 Vào file `/usr/share/jitsi-meet/interface_config.js`, tìm đến dòng `GENERATE_ROOMNAMES_ON_WELCOME_PAGE` sửa giá trị true thành `false`.
@@ -288,7 +293,7 @@ Vào file `/usr/share/jitsi-meet/interface_config.js`, tìm đến dòng `GENERA
 sed -i 's|GENERATE_ROOMNAMES_ON_WELCOME_PAGE: true,|GENERATE_ROOMNAMES_ON_WELCOME_PAGE: false,|g' /usr/share/jitsi-meet/interface_config.js
 ```
 
-### 5.2. Cấu hình để người dùng mobile truy cập được vào bằng trình duyệt
+### 5.2. Cấu hình để người dùng mobile :truy cập được vào bằng trình duyệt
 Vào file `/etc/jitsi/meet/<domain>-config.js`. Ở đây là IP: `/etc/jitsi/meet/10.10.30.188-config.js`, thêm dòng 
 ```
 disableDeepLinking: true,
