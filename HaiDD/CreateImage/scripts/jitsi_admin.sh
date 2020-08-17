@@ -112,6 +112,13 @@ echo "jitsi-meet jitsi-meet/jvb-hostname string $NEW_DOMAIN" | debconf-set-selec
 #nMeet-admin
 sed -Ei "s|$OLD_DOMAIN|$NEW_DOMAIN|g" /etc/nginx/sites-available/nmeet-admin
 
+# install Certbot
+add-apt-repository ppa:certbot/certbot <<EOF
+
+EOF
+
+apt install python-certbot-nginx -y
+
 # Start service
 systemctl start nginx
 prosodyctl start
@@ -123,3 +130,4 @@ crontab -l | { cat; echo "00 02 * * * /bin/restartJitsiService.sh"; } | crontab 
 source /opt/env/bin/activate
 /opt/env/bin/python /opt/NH-Jitsi/manage.py update_domain --settings=project.settings.thanhnb02
 echo "from users.models import User; User.objects.create_superuser('admin', 'admin@$NEW_DOMAIN', '$1')" | /opt/env/bin/python /opt/NH-Jitsi/manage.py shell
+
