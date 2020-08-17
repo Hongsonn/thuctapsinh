@@ -112,12 +112,6 @@ echo "jitsi-meet jitsi-meet/jvb-hostname string $NEW_DOMAIN" | debconf-set-selec
 #nMeet-admin
 sed -Ei "s|$OLD_DOMAIN|$NEW_DOMAIN|g" /etc/nginx/sites-available/nmeet-admin
 
-# install Certbot
-add-apt-repository ppa:certbot/certbot <<EOF
-
-EOF
-
-apt install certbot
 
 # Start service
 systemctl start nginx
