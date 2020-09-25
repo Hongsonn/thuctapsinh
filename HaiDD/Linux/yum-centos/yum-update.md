@@ -156,6 +156,8 @@ Trong đó:
 
 ### **Chú ý:** Ta chỉ có thể update lên phiên bản cập mới hơn trong. Ví dụ: Đang là Centos 7.7.1908 thì ta chỉ có thể udpate lên 1 phiên bản Centos 7 mới hơn. Không thể xuống phiên bản cập nhật thấp hơn hay là lên Centos 8
 
+**Lưu ý:** Do cấu trúc thư mục các gói cài đặt của bản 7.8.2003 thay đổi, không giống như các bản thấp hơn nó. Nên để update lên bản 7.8.2003 thì ta không chỉnh sửa file `/etc/yum.repos.d/CentOS-Base.repo` và thực hiện update bình thường.
+
 ## Chỉ định chỉ sử dụng 1 phiên bản cập nhật
 Thay biến `$releasever` tại phần `baseurl` trong file `/etc/yum.repos.d/CentOS-Base.repo` thành phiên bản chỉ định muốn sử dụng:
 ```
@@ -166,5 +168,13 @@ vi /etc/yum.repos.d/CentOS-Base.repo
 
 Khi đó, việc thực hiện update, ta không cần chỉ định version nữa. Nó sẽ tự động dùng phiên bản ta chỉ định trong file trên
 ```
-
+yum update -y
 ```
+
+Kiểm tra lại phiên bản:
+```
+CentOS Linux release 7.7.1908 (Core)
+3.10.0-1062.el7.x86_64
+```
+
+Phiên bản Kernel mới sẽ được đặt làm mặc định sau khi reboot.
