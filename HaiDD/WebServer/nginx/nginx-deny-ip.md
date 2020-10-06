@@ -79,4 +79,6 @@ Thêm dòng sau vào thẻ server của vhost
 include /etc/nginx/allow-block-ip.conf;
 ```
 
-**Lưu ý:** Khi sử dụng kết hợp `deny` và `allow` thì `allow` phải được khai báo trước `deny`
+**Lưu ý:** Khi sử dụng kết hợp `deny` và `allow` thì rule  nào khai báo trước sẽ được thực hiện trước.
+
+Ví dụ: bạn để `deny all;` trước sau đó khai báo `allow` thì các rule `allow` sẽ không có tác dụng
