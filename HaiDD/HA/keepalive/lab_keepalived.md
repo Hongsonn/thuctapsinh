@@ -186,3 +186,12 @@ systemctl enable keepalived
 Kiểm tra node1, ta sẽ thấy IP VIP do keepalived quản lý:
 
 <img src="..\images\keepalive\Screenshot_5.png">
+
+## Kiểm tra
+Truy cập IP VIP: 10.10.35.170, ta sẽ thấy nội dung của node1
+
+<img src="..\images\keepalive\Screenshot_6.png">
+
+Tắt node1. Sau đó, reload lại trang. Ta sẽ thấy nội dung của node2
+
+<img src="..\images\keepalive\Screenshot_7.png">
