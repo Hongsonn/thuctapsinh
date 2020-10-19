@@ -80,7 +80,7 @@ vrrp_script chk_httpd {
 }
 ```
 
-Tiếp theo chúng ta sẽ tạo block với tên vrrp_instance. Đây là thành phần chính khi cấu hình HA cho dịch vụ HAProxy. Theo bài, tôi cấu hình cho keepalived kết nối với các dịch vụ tương tự nó thuộc các node khác thông giao diện mạng `eth0`
+Tiếp theo chúng ta sẽ tạo block với tên vrrp_instance. Đây là thành phần chính khi cấu hình HA. Theo bài, tôi cấu hình cho keepalived kết nối với các dịch vụ tương tự nó thuộc các node khác thông giao diện mạng `eth0`
 
 Mô hình keepalive là `MASTER` - `SLAVE` nên chúng ta cần chỉ định node Master và node Slave. Trong bài ta sẽ cấu hình node1 làm node master với tham số state bằng `MASTER`. node2 làm node slave với cấu hình state bằng `BACKUP`.
 
@@ -132,7 +132,7 @@ vrrp_instance VI_1 {
 }
 ```
 
-=> Cấu hình đầy đủ keepalived
+=> **Cấu hình đầy đủ keepalived**
 #### Trên node 1:
 ```
 echo '
