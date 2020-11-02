@@ -3,7 +3,7 @@
 # Tổng quan
 HAProxy viết tắt của High Availability Proxy, là công cụ mã nguồn mở nổi tiếng ứng dụng cho giải pháp cân bằng tải TCP/HTTP cũng như giải pháp máy chủ Proxy (Proxy Server). 
 
-HAProxy có thể chạy trên các mỗi trường Linux, Solaris, FreeBSD. Công dụng phổ biến nhất của HAProxy là cải thiện hiệu năng, tăng độ tin cậy của hệ thống máy chủ bằng cách phân phối khối lượng công việc trên nhiều máy chủ (như Web, App, cơ sở dữ liệu). HAProxy hiện đã và đang được sử dụng bởi nhiều website lớn như GoDaddy, GitHub, Bitbucket, Stack Overflow, Reddit, Speedtest/./net, Twitter và trong nhiều sản phẩm cung cấp bởi Amazon Web Service.
+HAProxy có thể chạy trên các môi trường Linux, Solaris, FreeBSD. Công dụng phổ biến nhất của HAProxy là cải thiện hiệu năng, tăng độ tin cậy của hệ thống máy chủ bằng cách phân phối khối lượng công việc trên nhiều máy chủ (như Web, App, cơ sở dữ liệu). HAProxy hiện đã và đang được sử dụng bởi nhiều website lớn như GoDaddy, GitHub, Bitbucket, Stack Overflow, Reddit, Speedtest/./net, Twitter và trong nhiều sản phẩm cung cấp bởi Amazon Web Service.
 
 # Thuật ngữ trong HA proxy
 Có rất nhiều thuật ngữ và khái niệm được sử dụng trong HAProxy khi nối về cân bằng tải (Load balancing) và máy chủ. Ở đây, tôi sẽ tập trung vào các khái niệm thông dụng được sử dụng nhiều trong HAProxy
@@ -19,7 +19,7 @@ Backend là tập các server nhận các request đã được điều tiết (
 - Thuật toán cân bằng tải (Round Robin, Least Connection, IP Hash)
 - Danh sách các Server, Port (Nhận, xử lý request)
 
-Backend có thể chứa một hoặc nhiều server. Việc thêm nhiều server vào backend sẽ cải thiện tải, hiệu năng, tăng độ tin cậy dịch vụ. Và khi một server thuộc backend không khả dụ, các server khác thuộc backend sẽ chịu tải thay cho server xảy ra vấn đề.
+Backend có thể chứa một hoặc nhiều server. Việc thêm nhiều server vào backend sẽ cải thiện tải, hiệu năng, tăng độ tin cậy dịch vụ. Và khi một server thuộc backend không khả dụng, các server khác thuộc backend sẽ chịu tải thay cho server xảy ra vấn đề.
 
 Ví dụ minh họa
 ```
@@ -54,7 +54,7 @@ Kiến trúc đơn giản nhất khi triển khai ứng dụng web:
 
 <img src="..\images\haproxy\Screenshot_1.png">
 
-Theo mô hình trên, người dùng sẽ kết nối trực tiếp tới Webserver, và không sử dụng dịch vụ cân bằng tải. Nếu web server xảy ra vấn đề, người dùng sẽ không thể kết nối tới Web được nữa. Và nếu trong trường hợp nhiều người cùng truy cập, webserver có thể không đáp ứng được các request, dẫn đến trải nhiệm sử dụng sẽ giảm xuống.
+Theo mô hình trên, người dùng sẽ kết nối trực tiếp tới Webserver, và không sử dụng dịch vụ cân bằng tải. Nếu web server xảy ra vấn đề, người dùng sẽ không thể kết nối tới Web được nữa. Và nếu trong trường hợp nhiều người cùng truy cập, webserver có thể không đáp ứng được các request, dẫn đến trải nghiệm sử dụng sẽ giảm xuống.
 
 ## Layer 4 Load Balancing
 Cách đơn giản nhất để cân bằng tải các request tới nhiều server là sử dụng cân bằng tải mức layer 4 TCP (Tầng giao vận - transport layer). Phương pháp sẽ điều hướng các request dựa trên IP và Port. 
