@@ -84,7 +84,7 @@ Thuật toán cân bằng tải được sử dụng nhằm định nghĩa các 
 - `source`: các request được chuyển đến server bằng các hash của IP người dùng. Phương pháp này giúp người dùng đảm bảo luôn kết nối tới một server
 
 # Sticky Sessions
-Một số ứng dụng yêu cầu người dùng phải giữ kết nối tới cùng một server thuộc backend, để giữ kết nối giữa client với một backend server bạn có thể sử dụng tùy chọn sticky sessions, xem thêm tại link dưới.
+Một số ứng dụng yêu cầu người dùng phải giữ kết nối tới cùng một server thuộc backend, để giữ kết nối giữa client với một backend server bạn có thể sử dụng tùy chọn sticky sessions
 
 # Health Check
 HAProxy sử dụng health check để phát hiện các backend server sẵn sàng xử lý request. Kỹ thuật này sẽ tránh việc loại bỏ server khỏi backend thủ công khi backend server không sẵn sàng. health check sẽ cố gắnh thiết lập kết nối TCP tới server để kiểm tra backend server có sẵn sàng xử lý request.
