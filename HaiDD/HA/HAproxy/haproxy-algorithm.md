@@ -45,3 +45,48 @@ Thuật toán này khắc phục được tình trạng một số server có l�
 
 Thuật toán này hoạt động tốt khi mà hiệu suất và khả năng tải của các server là tương đương nhau.
 
+# 3. Sticky session
+Trong môi trường web, nhiều khi chúng ta cần cố định session của user, như để duy trì trạng thái login. Khi đó, chúng ta cần cố định session trên một server. HAProxy hỗ trợ một số thuật toán Load Balancing duy trì trạng thái kết nối mà cho phép cố định session như hdr, rdp-cookie, source, uri hoặc url_param. Chẳng hạn như:
+
+```
+    backend cms
+        balance source
+        hash-type consistent
+        server web1 192.168.10.110:8080 check
+        server web2 192.168.10.111:8080 check
+        server web3 192.168.10.112:8080 check
+```
+
+Nếu chúng ta muốn cố định session mà vẫn sử dụng các thuật toán load balancing như: roundrobin, leastconn, hoặc static-rr, khi đó chúng ta sử dụng “Sticky Session”. Sticky session cho phép cố định session của users mà sử dụng cookie, và HAProxy sẽ điều phối để luôn request từ một user đến cùng một server.
+
+Để sử dụng sticky session trong HAProxy, chúng ta thêm tùy chọn `cookie cookie_name insert/prefix` vào trong phần `backend`.
+
+## 2.1. Session cookie được thiết lập bởi HAProxy
+Khi đó sử dụng cookie` cookie_name insert <options>`. "cookie_name" là giá trị mà HAProxy sẽ chèn vào (insert). Khi client quay lại (tức là cũng là client này và request tiếp theo), HAProxy sẽ biết được server nào để chọn cho client này. Ví dụ:
+
+```
+    cookie  WEB insert
+    server web1 192.168.1.110:8080 cookie web1 check
+    server web2 192.168.1.111:8080 cookie web2 check
+    server web3 192.168.1.112:8080 cookie web3 check
+```
+
+<img src="..\images\haproxy\Screenshot_11.png">
+
+Khi đó chúng ta thấy giá trị cookie mà HAProxy phản hồi cho client là `WEB=web1`
+
+## 2.2. Sử dụng session cookie của ứng dụng
+Khi đó sử dụng `cookie SESSION_ID prefix <option>`. “SESSION_ID” là tên cookie của application như PHPSESSID, JSESSID, laravel_session, … Khi đó, HAProxy sẽ sử dụng session id cookie mà được tạo bởi application để duy trì kết nối giữa một client và một server backend. Cách thức hoạt động, đó là HAProxy sẽ mở rộng cookie với một SESSION ID cookie hoặc cookie đang tồn tại, mà có đặt trước nó là giá trị cookie của server và dấu `~`.
+
+```
+    cookie laravel_session prefix
+    server web1 192.168.1.110:8080 cookie web1 check
+    server web2 192.168.1.111:8080 cookie web2 check
+    server web2 192.168.1.112:8080 cookie web3 check
+```
+
+<img src="..\images\haproxy\Screenshot_12.png">
+
+Khi đó chúng ta thấy HAProxy server phản hồi với header như hình, với giá trị cookie được thay đổi là: `laravel_session=web1~eyJpdiI6InJuOUN…1Lc0E9PSIsInZhbH` với giá trị prefix là `web1~` trước giá trị cookie của application mà HAProxy đã thêm vào.
+
+Hạn chế của sticky session: với sticky session, việc các request từ một user sẽ chỉ cố định vào một server. Vì vậy mà sẽ không đảm bảo được tính điều phối nhiều request từ một users đến nhiều server. Để khắc phục điểm hạn chế này, thì hiện nay có một số phần mềm như redis, memcached, … cho phép lưu session của user, còn việc điều phối các request của user thì vẫn thực hiện bình thường đến các server.
