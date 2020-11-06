@@ -45,10 +45,10 @@ global
 
 Ý nghĩa các cấu hình
 
-- `maxconn`: Chỉ định giới hạn số kết nối mà HAProxy có thể thiết lập. Sử dụng với mục đích bảo vệ load balancer khởi vấn đề tràn ram sử dụng.
+- `maxconn`: Chỉ định giới hạn số kết nối mà HAProxy có thể thiết lập. Sử dụng với mục đích bảo vệ load balancer khỏi vấn đề tràn ram sử dụng.
 - `log`: Bảo đảm các cảnh báo phát sinh tại HAProxy trong quá trình khởi động, vận hành sẽ được gửi tới syslog
-- `stats socket` : Định nghĩa runtime api, có thể sử dụng để disable server hoặc health checks, thấy đổi load balancing weights của server. 
-- `user / group` : chỉ định quyền sử dụng để khởi tạo tiến trình HAProxy. Linux yêu cầu xử lý bằng quyền root cho nhưng port nhở hơn 1024. Nếu không định nghĩa user và group, HAProxy sẽ tự động sử dụng quyền root khi thực thi tiến trình.
+- `stats socket` : Định nghĩa runtime api, có thể sử dụng để disable server hoặc health checks, thay đổi load balancing weights của server. 
+- `user / group` : chỉ định quyền sử dụng để khởi tạo tiến trình HAProxy. Linux yêu cầu xử lý bằng quyền root cho nhưng port nhỏ hơn 1024. Nếu không định nghĩa user và group, HAProxy sẽ tự động sử dụng quyền root khi thực thi tiến trình.
 
 ## Default
 Khi cấu hình tăng dần, phức tạp, khó đọc, các thiết lập cấu hình tại mục `defaults` giúp giảm các trùng lặp. Thiết lập tại mục `defaults` sẽ áp dụng cho tất cả mục `frontend` và `backend` nằm sau nó. Ta hoàn toàn có thể thiết lập lại trong từng mục backend, frontend.
@@ -76,7 +76,7 @@ Ví dụ: các bạn có thế thiết lập `mode http` tại mục `defaults`,
     maxconn                 3000
 ```
 
-- `timeout connect` : chỉ định thời gian HAProxy đợi thiết lập kết nối TCP tới backend server. Hậu tố `s` tại 10s thể hiện khoảng thời gian 10 giây, nếu bạn không có hậu tố `s`, khoảng thời gian sẽ tính bằng `milisecond`. xem thêm.
+- `timeout connect` : chỉ định thời gian HAProxy đợi thiết lập kết nối TCP tới backend server. Hậu tố `s` tại 10s thể hiện khoảng thời gian 10 giây, nếu bạn không có hậu tố `s`, khoảng thời gian sẽ tính bằng `milisecond`.
 - `timeout server` : chỉ định thời gian chờ kết nối tới backend server.
 
 **Lưu ý:**
@@ -147,7 +147,7 @@ backend web_servers
 
 - `cookie`: Sử dụng cookie-based. Cấu hình sẽ khiến HAProxy gửi cookie tên `SERVERUSED` tới client, liên kết backend server với client. Từ đó các request xuất phát từ client sẽ tiếp tục nói chuyện với server chỉ định. Cần bổ sung thêm tùy chọn `cookie` trên server line
 
-- `option httpchk`: Với tùy chọn, HAProxy sẽ sử dụng `health check` dạng HTTP (Layer 7) thay vì kiếm trả kết nối dạng TCP (Layer 4). Và khi server không phản hồi request http, HAProxy sẽ thực hiện TCP check tới IP Port. Health check sẽ tự động loại bỏ các backend server lỗi, khi không có backend server sẵn sàng xử lý request, HAProxy sẽ trả lại phản hồi `500 Server Error`. Mặc định HTTP check sẽ kiểm tra root path `/` (Có thể thay đổi). Và nếu phản hồi health check là 2xx, 3xx sẽ được coi là thành công.
+- `option httpchk`: Với tùy chọn, HAProxy sẽ sử dụng `health check` dạng HTTP (Layer 7) thay vì kiểm trả kết nối dạng TCP (Layer 4). Và khi server không phản hồi request http, HAProxy sẽ thực hiện TCP check tới IP Port. Health check sẽ tự động loại bỏ các backend server lỗi, khi không có backend server sẵn sàng xử lý request, HAProxy sẽ trả lại phản hồi `500 Server Error`. Mặc định HTTP check sẽ kiểm tra root path `/` (Có thể thay đổi). Và nếu phản hồi health check là 2xx, 3xx sẽ được coi là thành công.
 
 - `default-server`: Bổ sung tùy chọn cho bất kỳ backend server thuộc `backend` section (VD: health checks, max connections, v.v). Điều này kiến cấu hình dễ dàng hơn khi đọc.
 
@@ -187,3 +187,4 @@ listen web-backend:
 
 # Tham khảo
 - https://blog.cloud365.vn/linux/cau-truc-file-cau-hinh-haproxy/
+- https://github.com/lacoski/haproxy/blob/master/docs/About-HAProxy-Configuration-File.md
