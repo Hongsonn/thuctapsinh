@@ -1,5 +1,15 @@
 # Triển khai HAProxy Pacemaker cho Cluster 3 node chạy Wordpress trên CentOS-7
 
+## Phân hoạch
+
+<img src="..\images\cluster\Screenshot_16.png">
+
+## Mô hình
+Mô hình triển khai:
+
+<img src="..\images\cluster\Screenshot_15.png">
+
+
 # Cài đặt wordpress
 > ## Cài đặt wordpress trên cả 3 node trong Cluster
 
@@ -187,7 +197,7 @@ Ta thấy node đang nhận VIP là `node1`
 
 Tiến hành tắt `node1`
 
-Kiểm tra lại trên trang stat HAProxy và truy cập trang web:
+Kiểm tra lại trên trang stat **HAProxy** và truy cập trang web:
 
 <img src="..\images\cluster\Screenshot_23.png">
 
