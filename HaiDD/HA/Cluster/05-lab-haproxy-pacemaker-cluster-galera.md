@@ -53,6 +53,14 @@ echo "10.10.35.164 node1" >> /etc/hosts
 echo "10.10.35.165 node2" >> /etc/hosts
 echo "10.10.35.166 node3" >> /etc/hosts
 ```
+File `/etc/hosts` sau khi cấu hình:
+```
+127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+10.10.35.164 node1
+10.10.35.165 node2
+10.10.35.166 node3
+```
 
 #### **Tại node2**
 Cấu hình hostname
@@ -152,6 +160,14 @@ Tắt Mariadb
 systemctl stop mariadb
 ```
 **Lưu ý:** Không khởi động dịch vụ mariadb sau khi cài (Liên quan tới cấu hình Galera Mariadb)
+
+### Cấu hình Chrony
+> ### Thực hiện trên cả 3 node
+**Lưu ý:** Vì các node trong Cluster cần đồng bộ nên việc cấu hình chrony để đồng bộ thời gian từ 1 NTP server là rất quan trọng
+
+- Cấu hình 3 node cùng timezone
+- Thời gian đồng bộ từ 1 NTP server giống nhau.
+
 
 ### Cấu hình Galera Cluster
 #### **Tại node1**
