@@ -4,8 +4,14 @@ Cấu hình HAProxy pacemaker cluster galera 3 node theo [tài liệu](./05-lab-
 
 
 # Mô hình
+Phân hoạch:
+
+<img src="..\images\cluster\Screenshot_20.png">
+
+Mô hình triển khai:
 
 <img src="..\images\cluster\Screenshot_19.png">
+
 
 # 1. Cấu hình database trên node trong Cluster
 > ### Thực hiện trên 1 node `node1`
@@ -32,7 +38,7 @@ GRANT ALL PRIVILEGES ON wp_db.* TO wp_user@'node1' IDENTIFIED BY 'nhanhoa2020';
 
 GRANT ALL PRIVILEGES ON wp_db.* TO wp_user@'node2' IDENTIFIED BY 'nhanhoa2020';
 
-GRANT ALL PRIVILEGES ON wp_db.* TO wp_user@'node2' IDENTIFIED BY 'nhanhoa2020';
+GRANT ALL PRIVILEGES ON wp_db.* TO wp_user@'node3' IDENTIFIED BY 'nhanhoa2020';
 ```
 
 Sau đó xác thực lại những thay đổi về quyền và thoát giao diện mariadb
