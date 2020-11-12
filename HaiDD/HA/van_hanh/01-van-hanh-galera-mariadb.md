@@ -380,11 +380,11 @@ systemctl enable mariadb
 ```
 
 # **Các Case xử lý sự cố**
-Trường hợp xảy ra sự cố có 2 loại:
+**Trường hợp xảy ra sự cố có 2 loại:**
 - An toàn: Tức dịch vụ tắt bình thường `systemctl stop mariadb`
 - Không an toàn: Khi tiến trình bị crash, os xảy ra vấn đề, mất điện ....
 
-## Case 1: 1 node xảy ra vấn đề
+## **Case 1: 1 node xảy ra vấn đề**
 ### Mô tả
 Trong mô hình 3 node, nếu 1 node xảy ra vấn đề (Crash OS, mất điện, Crash tiến trình, tắt ...), cụm 2 node vẫn hoạt động bình thường.
 
@@ -393,3 +393,232 @@ Khởi động lại OS và tiến trình database, dịch vụ hoạt động b
 ```
 systemctl start mariadb
 ```
+
+## **Case 2: 2 node xảy ra vấn đề**
+Có 2 trường hợp:
+- 2 node down dịch vụ an toàn
+- 2 node down dịch vụ không an toàn
+
+**Lưu ý:** Trong mô hình 3 node, khi 2 node có vấn đề thì không được phép restart service trên node còn lại
+
+### Trường hợp dịch vụ down an toàn
+- Với mô hình 3 node, 2 node down an toàn dịch vụ chạy bình thường, không xảy ra vấn đề
+- Khi bật lại dịch vụ tại 2 node down an toàn, dịch vụ mariadb trở lại hoạt động bình thường.
+
+### Trường hợp dịch vụ down không an toàn
+- Nếu dịch vụ tại 2 trong 3 node down không an toàn, dịch vụ mariadb tại cả 3 node sẽ không thể hoạt động do cơ chế quorum nhằm tránh dữ liệu bị phân mảnh, khác nhau tại 3 node
+- Để lab được trường hợp này sử dụng tắt nóng trên Webvirt (Force off)
+
+-> Trong hợp hợp này cụm đã bị split brain, để giải quyết ta cần khởi tạo lại quorum của cụm
+
+**Cách giải quyết:**
+- Bước 1: Chắc chắn tắt hẳn 2 node trong trạng thái lỗi (Tắt nóng (Force off) hoặc nút nguồn server).
+- Bước 2: Tại node không lỗi, thực hiện lệnh:
+    ```
+    mysql -u root -e "SET GLOBAL wsrep_provider_options='pc.bootstrap=1';"
+    ```
+    
+    Ví dụ:
+    ```
+    [root@node3 ~]# mysql -u root -e "SET GLOBAL wsrep_provider_options='pc.bootstrap=1';"
+    [root@node3 ~]# mysql -u root -e "SHOW STATUS LIKE 'wsrep_cluster_size'"
+    +--------------------+-------+
+    | Variable_name      | Value |
+    +--------------------+-------+
+    | wsrep_cluster_size | 1     |
+    +--------------------+-------+
+    ```
+
+    - Sau 2 bước trên cluster sẽ hoạt động trở lại
+
+- Bước 3: Bật lại các node xảy ra sự cố bình thường. Dịch vụ mariadb tại các node lỗi sẽ tự join Cluster
+
+- Bước 4: Kiểm tra lại trên các node
+    ```
+    mysql -u root -e "SHOW STATUS LIKE 'wsrep_cluster_size'"
+
+    +--------------------+-------+
+    | Variable_name      | Value |
+    +--------------------+-------+
+    | wsrep_cluster_size | 3     |
+    +--------------------+-------+
+    ```
+
+## **Case 3: 3 node xảy ra sự cố**
+Có 2 trường hợp:
+- 3 node down dịch vụ an toàn
+- 3 node down dịch vụ không an toàn
+
+### Trường hợp dịch vụ down an toàn
+- Trong trường hợp các node down an toàn, kiểm tra giá trị `seqno` trong file `/var/lib/mysql/grastate.dat`. Node có giá trị lớn nhất sẽ là node khởi tạo lại cluster
+
+    ```
+    # node1
+    [root@node1 ~]# cat /var/lib/mysql/grastate.dat
+    # GALERA saved state
+    version: 2.1
+    uuid:    2491db5f-2338-11eb-a952-3f1bac1e04b4
+    seqno:   892
+    safe_to_bootstrap: 0
+
+    # node2
+    [root@node2 ~]# cat /var/lib/mysql/grastate.dat
+    # GALERA saved state
+    version: 2.1
+    uuid:    2491db5f-2338-11eb-a952-3f1bac1e04b4
+    seqno:   892
+    safe_to_bootstrap: 0
+
+    # node3
+    [root@node3 ~]# cat /var/lib/mysql/grastate.dat
+    # GALERA saved state
+    version: 2.1
+    uuid:    2491db5f-2338-11eb-a952-3f1bac1e04b4
+    seqno:   893
+    safe_to_bootstrap: 0
+    ```
+
+- Như trường hợp trên, `node3` có giá trị `seqno` cao nhất, tức là đây là node down sau cùng. Vì vậy, ta sẽ thao tác khởi tạo cluster tại `node3`.
+
+- Để khởi tạo lại cluster, thay đổi giá trị `safe_to_bootstrap` bằng 1 và chạy câu lệnh `galera_new_cluster`. Sau khi chạy câu lệnh `galera_new_cluster` cluster sẽ khởi tạo trở lại.
+
+    ```
+    [root@node3 ~]# cat /var/lib/mysql/grastate.dat
+    # GALERA saved state
+    version: 2.1
+    uuid:    2491db5f-2338-11eb-a952-3f1bac1e04b4
+    seqno:   893
+    safe_to_bootstrap: 1
+
+    [root@node3 ~]# galera_new_cluster
+
+    [root@node3 ~]# systemctl status mariadb
+    ● mariadb.service - MariaDB 10.2.35 database server
+    Loaded: loaded (/usr/lib/systemd/system/mariadb.service; enabled; vendor preset: disabled)
+    Drop-In: /etc/systemd/system/mariadb.service.d
+            └─migrated-from-my.cnf-settings.conf
+    Active: active (running) since Thu 2020-11-12 10:49:21 +07; 4s ago
+    ```
+
+- Start service 2 node còn lại theo cách thông thường:
+    ```
+    # node1
+    [root@node1 ~]# systemctl start mariadb
+
+    # node2
+    [root@node2 ~]# systemctl start mariadb
+    ```
+
+- Kiểm tra lại Cluster trên các node
+    ```
+    mysql -u root -e "SHOW STATUS LIKE 'wsrep_cluster_size'"
+
+    +--------------------+-------+
+    | Variable_name      | Value |
+    +--------------------+-------+
+    | wsrep_cluster_size | 3     |
+    +--------------------+-------+
+    ```
+
+### Trường hợp dịch vụ down không an toàn
+- Trong trường hợp tốt này, trạng thái database sẽ được lưu lại, khi các node hoạt động trở lại Cluster sẽ tự khôi phục
+- Trong trường hợp xấu, cụm không thể khởi động lại, lần vết cụm down sau cùng (tốt nhất) hoặc chọn 1 node bất kỳ thực hiện. Sẽ có rủi ro mất mát dữ liệu
+
+**Cách giải quyết:**
+- Bật lại các node
+- Thực hiện trên tất cả các node: kill tiến trình mysql và stop service mariadb:
+    ```
+    pkill -KILL -u mysql
+    systemctl stop mariadb
+    ```
+
+Trên node down sau cùng (tốt nhất). 
+- Chỉnh giá trị `safe_to_bootstrap` trong file `/var/lib/mysql/grastate.dat` thành `1`
+    ```
+    [root@node2 ~]# cat /var/lib/mysql/grastate.dat
+    # GALERA saved state
+    version: 2.1
+    uuid:    2491db5f-2338-11eb-a952-3f1bac1e04b4
+    seqno:   -1
+    safe_to_bootstrap: 1
+    ```
+
+- Tắt dịch vụ mariadb, khôi phục cluster
+    ```
+    systemctl stop mariadb
+    galera_recovery
+    galera_new_cluster
+    ```
+
+- Kiểm tra dịch vụ:
+    ```
+    [root@node2 ~]# systemctl status mariadb
+    ● mariadb.service - MariaDB 10.2.35 database server
+    Loaded: loaded (/usr/lib/systemd/system/mariadb.service; enabled; vendor preset: disabled)
+    Drop-In: /etc/systemd/system/mariadb.service.d
+            └─migrated-from-my.cnf-settings.conf
+    Active: active (running) since Thu 2020-11-12 11:12:27 +07; 5s ago
+    ```
+
+Trên các node còn lại, thực hiện khởi động lại service mariadb:
+```
+systemctl restart mariadb
+```
+
+Kiểm tra lại Cluster trên các node
+```
+mysql -u root -e "SHOW STATUS LIKE 'wsrep_cluster_size'"
+
++--------------------+-------+
+| Variable_name      | Value |
++--------------------+-------+
+| wsrep_cluster_size | 3     |
++--------------------+-------+
+```
+
+## Case 4: Khởi động lại Cluster
+- Trong trường hợp khởi động cluster (restart OS), cluster không hoạt động
+- Trong trường hợp xấu cụm không thể khởi động lại, lần vết cụm down sau cùng (tốt nhất, ít rủi ro mất mát dữ liệu) hoặc chọn 1 node bất kỳ thực hiện(sẽ có rủi ro mất mát dữ liệu):
+
+**Cách giải quyết:**
+- Chỉnh giá trị `safe_to_bootstrap` trong file `/var/lib/mysql/grastate.dat` thành `1`
+    ```
+    [root@node2 ~]# cat /var/lib/mysql/grastate.dat
+    # GALERA saved state
+    version: 2.1
+    uuid:    2491db5f-2338-11eb-a952-3f1bac1e04b4
+    seqno:   -1
+    safe_to_bootstrap: 1
+    ```
+
+- Tắt dịch vụ mariadb, khôi phục cluster
+    ```
+    systemctl stop mariadb
+    galera_recovery
+    galera_new_cluster
+    ```
+
+- Kiểm tra lại service:
+    ```
+    [root@node2 ~]# systemctl status mariadb
+    ● mariadb.service - MariaDB 10.2.35 database server
+    Loaded: loaded (/usr/lib/systemd/system/mariadb.service; enabled; vendor preset: disabled)
+    Drop-In: /etc/systemd/system/mariadb.service.d
+            └─migrated-from-my.cnf-settings.conf
+    Active: active (running) since Thu 2020-11-12 11:24:10 +07; 6s ago
+    ```
+
+- Trên các node còn lại, thực hiện restart service:
+    ```
+    systemctl restart mariadb
+    ```
+
+- Kiểm tra :
+    ```
+    mysql -u root -e "SHOW STATUS LIKE 'wsrep_cluster_size'"
+    +--------------------+-------+
+    | Variable_name      | Value |
+    +--------------------+-------+
+    | wsrep_cluster_size | 3     |
+    +--------------------+-------+
+    ```
