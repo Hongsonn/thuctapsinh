@@ -239,3 +239,140 @@ Ta sẽ thực hiện chuyển resource `Virtual_IP` từ `node1` sang `node4`
     ```
     pcs resource clear Virtual_IP
     ```
+
+## 5. Ngừng dịch vụ tại 1 node chỉ định
+Trạng thái Cluster
+```
+[root@node1 ~]# pcs status
+Cluster name: ha_cluster
+Stack: corosync
+Current DC: node1 (version 1.1.21-4.el7-f14e36fd43) - partition with quorum
+Last updated: Thu Nov 12 17:43:34 2020
+Last change: Thu Nov 12 17:42:19 2020 by root via crm_resource on node1
+
+4 nodes configured
+2 resources configured
+
+Online: [ node1 node2 node3 node4 ]
+
+Full list of resources:
+
+ Virtual_IP     (ocf::heartbeat:IPaddr2):       Started node2
+ Loadbalancer_HaProxy   (systemd:haproxy):      Started node2
+
+Daemon Status:
+  corosync: active/enabled
+  pacemaker: active/enabled
+  pcsd: active/enabled
+```
+
+Ta thấy, ở đây resource `Virtual_IP` đang started trên `node2`. Ta sẽ thực hiện ngừng dịch vụ `Virtual_IP` này trên `node2` để thực hiện bảo trì, nâng cấp:
+```
+pcs resource ban Virtual_IP node2
+```
+
+Kết quả sau khi thực hiện:
+```
+[root@node1 ~]# pcs status
+Cluster name: ha_cluster
+Stack: corosync
+Current DC: node1 (version 1.1.21-4.el7-f14e36fd43) - partition with quorum
+Last updated: Fri Nov 13 09:07:43 2020
+Last change: Fri Nov 13 09:07:38 2020 by root via crm_resource on node1
+
+4 nodes configured
+2 resources configured
+
+Online: [ node1 node2 node3 node4 ]
+
+Full list of resources:
+
+ Virtual_IP     (ocf::heartbeat:IPaddr2):       Started node1
+ Loadbalancer_HaProxy   (systemd:haproxy):      Started node1
+
+Daemon Status:
+  corosync: active/enabled
+  pacemaker: active/enabled
+  pcsd: active/enabled
+```
+
+Kiểm tra constraint, ta sẽ thấy `node2` đã disabled resource `Virtual_IP`
+```
+[root@node1 ~]# pcs constraint
+Location Constraints:
+  Resource: Virtual_IP
+    Disabled on: node2 (score:-INFINITY) (role: Started)
+Ordering Constraints:
+  start Virtual_IP then start Loadbalancer_HaProxy (kind:Optional)
+Colocation Constraints:
+  Virtual_IP with Loadbalancer_HaProxy (score:INFINITY)
+Ticket Constraints:
+```
+
+Cho phép dịch vụ hoạt động trở lại:
+```
+pcs resource clear Virtual_IP
+```
+
+Kiểm tra lại constraint:
+```
+[root@node1 ~]# pcs constraint
+Location Constraints:
+Ordering Constraints:
+  start Virtual_IP then start Loadbalancer_HaProxy (kind:Optional)
+Colocation Constraints:
+  Virtual_IP with Loadbalancer_HaProxy (score:INFINITY)
+Ticket Constraints:
+```
+
+## 6. Khởi động lại resource
+```
+pcs resource restart <Resource id>
+```
+
+## 7. Xóa resource
+```
+pcs resource delete <Resource id>
+```
+
+## 8. Lỗi resource
+Hiện tượng
+```
+[root@node2 ~]# pcs status
+Cluster name: ha_cluster
+Stack: corosync
+Current DC: node1 (version 1.1.19-8.el7_6.2-c3c624ea3d) - partition with quorum
+Last updated: Wed Jan 23 23:17:26 2019
+Last change: Wed Jan 23 23:14:28 2019 by root via cibadmin on node1
+
+3 nodes configured
+11 resources configured
+
+Online: [ node1 node2 node3 ]
+
+Full list of resources:
+
+Clone Set: Virtual_IP-clone [Virtual_IP] (unique)
+    Virtual_IP:0       (ocf::heartbeat:IPaddr2):       Started node2
+    Virtual_IP:1       (ocf::heartbeat:IPaddr2):       Started node2
+    Virtual_IP:2       (ocf::heartbeat:IPaddr2):       Started node2
+Clone Set: Web_Cluster-clone [Web_Cluster] (unique)
+    Web_Cluster:0      (ocf::heartbeat:apache):        Started node3
+    Web_Cluster:1      (ocf::heartbeat:apache):        Stopped
+    Web_Cluster:2      (ocf::heartbeat:apache):        Started node2
+Load_Balancer  (ocf::heartbeat:nginx): Started node2
+Clone Set: Supervisor_Service-clone [Supervisor_Service] (unique)
+    Supervisor_Service:0       (systemd:supervisord):  Started node2
+    Supervisor_Service:1       (systemd:supervisord):  Started node3
+    Supervisor_Service:2       (systemd:supervisord):  FAILED node1 (blocked)
+Celerybeat     (ocf::heartbeat:celerybeat):    Started node2 (Monitoring)
+```
+
+Thực hiện cleanup resource, trạng thái resource sẽ trở lại bình thường
+```
+pcs resource cleanup Supervisor_Service-clone
+```
+
+## 9. Di chuyển IP VIP
+- IP VIP cấu hình dạng clone nên không thể di chuyển theo cách thông thường
+- Ta sẽ di chuyển dịch vụ có ràng buộc với IP VIP, để pacemaker di chuyển IP VIP theo tài nguyên ràng buộc. Trong mô hình HA portal, ta sẽ di chuyển dịch vụ Load_Balancer (ràng buộc IP VIP (Virtual_IP) luôn hoat động trên cùng node với Nginx(Load_Balancer)).
