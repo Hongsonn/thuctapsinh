@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # ID chat Telegram
-USERID="-498240142"
+USERID=""
 
 # API Token bot
-TOKEN="1290803372:AAGcoKflF3IL83-UFj_HvBiEMWr7vRJ9hAQ"
+TOKEN=""
 
 # List disk
 INPUT="/root/nhanhoa-scripts/scripts/check_bad_disk/list_disk"
