@@ -1,7 +1,10 @@
 # Chỉ định mirror khi sử dụng yum
 
 ## 1. Tìm 1 mirror muốn sử dụng:
-Ví dụ ở đây là: http://mirrors.nhanhoa.com/
+Ví dụ ở đây là: 
+```
+http://mirrors.nhanhoa.com/centos/
+```
 
 ## 2. Sửa file `/etc/yum.repos.d/CentOS-Base.repo`
 Comment các dòng `mirrorlist=...`
